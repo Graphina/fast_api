@@ -1,0 +1,12 @@
+#-r requirements.txt
+black==22.6.0
+isort==5.8.0
+mypy==0.812
+#wily==1.19.0
+flake9==3.8.3.post2
+coverage==5.5
+pytest==6.2.3
+pytest-cov==2.11.1
+pre-commit==2.12.1
+vulture==2.3
+jupyter==1.0.0
