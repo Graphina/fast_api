@@ -1,0 +1,21 @@
+[tool.black]
+exclude = '(\.git|\.mypy_cache|\.venv|\.txt|\.md)'
+include = '\.pyi?$'
+line-length = 100
+target-version = ['py38']
+
+[tool.isort]
+profile = "black"
+
+[tool.vulture]
+min_confidence = 100
+exclude = [".git", ".mypy_cache", ".venv", ".txt", ".md"]
+paths = ["app"]
+sort_by_size = true
+verbose = true
+
+[tool.flake8]
+max-line-length = 120
+max-complexity = 10
+exclude = [".git", "__pycache__" ]
+ignore = "C414"

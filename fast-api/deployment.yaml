@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fast-api-test
+  labels:
+    app: fast-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fast-api
+  template:
+    metadata:
+      labels:
+        app: fast-api
+    spec:
+      containers:
+        - name: fast-api
+          image: dgscudscr01.azurecr.io/fast-api-test:yep1
+          ports:
+          - containerPort: 80
+          env:
+            - name: DD_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: DD_ENV
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: DD_SERVICE
+              value: fast-api-test
+            - name: DD_VERSION
+              value: "1.0.0"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fast-api-test
+spec:
+  selector:
+    app: fast-api
+  ports:
+    - port: 80
+      targetPort: 80
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: fastapi-websecure
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`dev.ds.degreed.com`) && PathPrefix(`/fast-api`)
+      kind: Rule
+      middlewares:
+        - name: basic-auth
+      services:
+        - name: fast-api-test
+          port: 80
+  tls:
+    secretName: cert
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: fastapi-web
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`dev.ds.degreed.com`) && PathPrefix(`/fast-api`)
+      kind: Rule
+      middlewares:
+        - name: nuclio-https
+      services:
+        - name: fast-api-test
+          port: 80
