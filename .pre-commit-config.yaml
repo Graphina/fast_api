@@ -1,0 +1,63 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-added-large-files
+    -   id: check-docstring-first
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.8.0
+    hooks:
+      - id: isort
+  - repo: https://github.com/psf/black
+    rev: 20.8b1
+    hooks:
+      - id: black
+        language_version: python3.8
+  - repo: https://gitlab.com/retnikt/flake9
+    rev: 3.8.3.post1
+    hooks:
+    - id: flake8
+      additional_dependencies: ['toml', 'flake8-comprehensions', 'flake8-rst-docstrings']
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v2.13.0
+    hooks:
+      - id: pyupgrade
+        args: [ --py38-plus ]
+  - repo: https://github.com/myint/docformatter
+    rev: v1.4
+    hooks:
+      - id: docformatter
+        # These arguments act as the configuration for docformatter. They:
+        # * make docformatter auto-format in-place if not compliant;
+        # * ensure there is a blank line after the final non-empty line;
+        # * wraps both summary and description at 72 characters (the latter
+        #   by default).
+        args: [--in-place, --wrap-summaries=120]
+  # - repo: https://github.com/pycqa/pydocstyle
+  #   rev: 6.0.0
+  #   hooks:
+  #     - id: pydocstyle
+  #       args: ["--ignore=D104,D202,D203,D205,D213,D301,D400,D406,D407,D413,D415"]
+  #         #-  --convention=google
+  #       exclude: |
+  #         (?x)(tests/|setup.py)
+###
+# ONLY add mypy once type annotations have been added
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v0.812
+  #   hooks:
+  #     - id: mypy
+#ONLY add the following two once doc strings are added othe CQ guides are agreed
+#  - repo: https://github.com/PyCQA/pylint
+#    rev: pylint-3.0.0a1
+#    hooks:
+#      - id: pylint
+default_stages: [ commit, push ]
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
